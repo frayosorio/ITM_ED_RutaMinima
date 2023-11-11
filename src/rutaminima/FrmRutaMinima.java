@@ -2,6 +2,8 @@
 
 package rutaminima;
 
+import javax.swing.JOptionPane;
+
 
 public class FrmRutaMinima extends javax.swing.JFrame {
 
@@ -18,6 +20,9 @@ public class FrmRutaMinima extends javax.swing.JFrame {
         g.mostrarNodos(cmbDestino);
         
         g.mostrarAristas(tblAristas);
+        
+        Resultado r = new Resultado();
+        r.mostrar(tblRuta);
     }
 
     /**
@@ -30,7 +35,7 @@ public class FrmRutaMinima extends javax.swing.JFrame {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
+        btnProcesar = new javax.swing.JButton();
         tp = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -51,12 +56,17 @@ public class FrmRutaMinima extends javax.swing.JFrame {
 
         jToolBar1.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Procesar.png"))); // NOI18N
-        jButton1.setToolTipText("Procesar Grafo");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
+        btnProcesar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Procesar.png"))); // NOI18N
+        btnProcesar.setToolTipText("Procesar Grafo");
+        btnProcesar.setFocusable(false);
+        btnProcesar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnProcesar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnProcesar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcesarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnProcesar);
 
         tblNodos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -200,6 +210,16 @@ public class FrmRutaMinima extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarActionPerformed
+        if(cmbOrigen.getSelectedIndex()>=0 && cmbDestino.getSelectedIndex()>=0){
+            Resultado r=AlgoritmosGrafos.dijkstra(g, cmbOrigen.getSelectedIndex(), cmbDestino.getSelectedIndex());
+            r.mostrar(tblRuta);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un ORIGEN y un DESTINO");
+        }
+    }//GEN-LAST:event_btnProcesarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -236,9 +256,9 @@ public class FrmRutaMinima extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnProcesar;
     private javax.swing.JComboBox cmbDestino;
     private javax.swing.JComboBox cmbOrigen;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

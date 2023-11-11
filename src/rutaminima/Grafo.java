@@ -22,6 +22,10 @@ public class Grafo {
         return null;
     }
 
+    public List<Nodo> getNodos() {
+        return nodos;
+    }
+
     public Nodo agregarNodo(String nombre) {
         Nodo n = new Nodo(nombre);
         nodos.add(n);
