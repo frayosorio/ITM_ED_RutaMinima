@@ -6,6 +6,7 @@ public class AlgoritmosGrafos {
     
     public static Resultado dijkstra(Grafo g, int inicio) {
         Resultado r = new Resultado();
+     
         
         ColaPrioridad cola = new ColaPrioridad();
         
