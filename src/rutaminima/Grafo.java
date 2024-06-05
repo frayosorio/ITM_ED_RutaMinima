@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -87,21 +88,30 @@ public class Grafo {
         DefaultTableModel dtm = new DefaultTableModel(datos, new String[]{"Nodo 1", "Nodo 2", "Distancia"});
         tbl.setModel(dtm);
     }
-    
-    public void mostrarNodos(JTable tbl){
-          String[][] datos = null;
+
+    public void mostrarNodos(JTable tbl) {
+        String[][] datos = null;
         if (nodos != null && nodos.size() > 0) {
             datos = new String[nodos.size()][2];
 
             for (int i = 0; i < nodos.size(); i++) {
                 datos[i][0] = nodos.get(i).getNombre();
                 datos[i][1] = nodos.get(i).getVecinos().stream()
-                                .map(Nodo::getNombre)
-                                .collect(Collectors.joining(", "));
+                        .map(Nodo::getNombre)
+                        .collect(Collectors.joining(", "));
             }
         }
         DefaultTableModel dtm = new DefaultTableModel(datos, new String[]{"Nombre", "Vecinos"});
-        tbl.setModel(dtm);      
+        tbl.setModel(dtm);
+    }
+
+    public void listarNodos(JComboBox cmb) {
+        String[] ciudades = new String[nodos.size()];
+        for (int i = 0; i < nodos.size(); i++) {
+            ciudades[i] = nodos.get(i).getNombre();
+        }
+        cmb.setModel(new javax.swing.DefaultComboBoxModel(ciudades));
+
     }
 
 }
