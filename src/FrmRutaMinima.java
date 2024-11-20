@@ -14,6 +14,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class FrmRutaMinima extends JFrame {
 
+    private Grafo g;
+
     public FrmRutaMinima() {
         setSize(600, 450);
         setTitle("Ruta Mínima");
@@ -80,6 +82,15 @@ public class FrmRutaMinima extends JFrame {
         });
 
         getContentPane().add(tp);
+
+        g = new Grafo();
+        String nombreArchivo = System.getProperty("user.dir") + "/src/datos/distancias.txt";
+        g.desdeArchivo(nombreArchivo);
+        g.mostrarNodos(tblNodos);
+        g.mostrarNodos(cmbDesde);
+        g.mostrarNodos(cmbHasta);
+        g.mostrarAristas(tblAristas);
+
     }
 
     private void btnRutaMinima_Click(ActionEvent evt) {
