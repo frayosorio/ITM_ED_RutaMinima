@@ -1,9 +1,16 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Nodo {
 
     private String nombre;
+    private double valor;
+    private List<Nodo> vecinos;
+    private List<Double> valores;
 
     public Nodo(String nombre) {
         this.nombre = nombre;
+        vecinos = new ArrayList();
     }
 
     public String getNombre() {
@@ -17,6 +24,27 @@ public class Nodo {
     @Override
     public boolean equals(Object n) {
         return nombre.equals(((Nodo) n).getNombre());
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    public List<Nodo> getVecinos() {
+        return vecinos;
+    }
+
+    public List<Double> getValores() {
+        return valores;
+    }
+
+    public void agregarVecino(Nodo n, double valor) {
+        vecinos.add(n);
+        valores.add(valor);
     }
 
 }

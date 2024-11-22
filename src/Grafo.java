@@ -11,6 +11,14 @@ public class Grafo {
     private List<Nodo> nodos;
     private List<Arista> aristas;
 
+    public List<Nodo> getNodos() {
+        return nodos;
+    }
+
+    public List<Arista> getAristas() {
+        return aristas;
+    }
+
     public Grafo() {
         nodos = new ArrayList<Nodo>();
         aristas = new ArrayList<Arista>();
@@ -32,7 +40,10 @@ public class Grafo {
                         if (!nodos.contains(n2)) {
                             nodos.add(n2);
                         }
-                        aristas.add(new Arista(n1, n2, Double.parseDouble(datos[2])));
+                        double valor = Double.parseDouble(datos[2]);
+                        aristas.add(new Arista(n1, n2, valor));
+                        n1.agregarVecino(n2, valor);
+                        n2.agregarVecino(n1, valor);
                     }
                     linea = br.readLine();
                 }
@@ -76,6 +87,42 @@ public class Grafo {
         }
         DefaultTableModel dtm = new DefaultTableModel(datos, encabezados);
         tbl.setModel(dtm);
+    }
+
+    // ********** METODOS ESTATICOS **********
+
+    public static Resultado dijkstra(Grafo g, int inicio) {
+        Resultado r = new Resultado();
+
+        ColaPrioridad cola = new ColaPrioridad();
+
+        cola.encolar(g.getNodos().get(inicio), 0);
+
+        while (!cola.vacia()) {
+            Nodo n = (Nodo) ((ElementoCola) cola.desencolar()).elemento;
+            r.agregar(n);
+
+            for (int i = 0; i < n.getVecinos().size(); i++) {
+                Nodo nVecino = n.getVecinos().get(i);
+                if (!r.getNodos().contains(nVecino)) {
+                    double valorAcumulado = n.getValor() + n.getValores().get(i);
+                    if(!cola.contiene(nVecino)){
+                        nVecino.setValor(valorAcumulado);
+                        cola.encolar(nVecino, valorAcumulado);
+                    }
+                    else{
+                        if(nVecino.getValor()>valorAcumulado){
+                            nVecino.setValor(valorAcumulado);
+                            cola.eliminar(nVecino);
+                            cola.encolar(nVecino, valorAcumulado);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return r;
     }
 
 }
