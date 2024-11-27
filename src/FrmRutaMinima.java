@@ -15,6 +15,9 @@ import javax.swing.table.DefaultTableModel;
 public class FrmRutaMinima extends JFrame {
 
     private Grafo g;
+    private JTable tblRutaMinima;
+    private JComboBox cmbDesde;
+    private JComboBox cmbHasta;
 
     public FrmRutaMinima() {
         setSize(600, 450);
@@ -55,15 +58,15 @@ public class FrmRutaMinima extends JFrame {
         lblHasta.setBounds(10, 35, 100, 25);
         pnlRutaMinima.add(lblHasta);
 
-        JComboBox cmbDesde = new JComboBox();
+        cmbDesde = new JComboBox();
         cmbDesde.setBounds(120, 10, 200, 25);
         pnlRutaMinima.add(cmbDesde);
 
-        JComboBox cmbHasta = new JComboBox();
+        cmbHasta = new JComboBox();
         cmbHasta.setBounds(120, 35, 200, 25);
         pnlRutaMinima.add(cmbHasta);
 
-        JTable tblRutaMinima = new JTable();
+        tblRutaMinima = new JTable();
         String[] encabezadosRutaMinima = new String[] { "Ciudad", "Distancia" };
         dtm = new DefaultTableModel(null, encabezadosRutaMinima);
         tblRutaMinima.setModel(dtm);
@@ -94,7 +97,11 @@ public class FrmRutaMinima extends JFrame {
     }
 
     private void btnRutaMinima_Click(ActionEvent evt) {
+        Resultado r = Grafo.dijkstra(g,
+                cmbDesde.getSelectedIndex(),
+                cmbHasta.getSelectedIndex());
 
+        r.mostrar(tblRutaMinima);
     }
 
 }

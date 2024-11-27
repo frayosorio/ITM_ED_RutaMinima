@@ -5,12 +5,22 @@ public class Nodo {
 
     private String nombre;
     private double valor;
+    private Nodo padre;
     private List<Nodo> vecinos;
     private List<Double> valores;
+
+    public Nodo getPadre() {
+        return padre;
+    }
+
+    public void setPadre(Nodo padre) {
+        this.padre = padre;
+    }
 
     public Nodo(String nombre) {
         this.nombre = nombre;
         vecinos = new ArrayList();
+        valores = new ArrayList();
     }
 
     public String getNombre() {
