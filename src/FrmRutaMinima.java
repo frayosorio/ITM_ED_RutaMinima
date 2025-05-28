@@ -9,11 +9,13 @@ import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
+import servicios.Grafo;
+
 public class FrmRutaMinima extends JFrame {
 
     private JTable tblRutaMinima;
-    private JComboBox cmbDesde;
-    private JComboBox cmbHasta;
+    private JComboBox cmbDesde, cmbHasta;
+    private JTable tblNodos, tblAristas;
 
     public FrmRutaMinima() {
         setSize(600, 450);
@@ -30,16 +32,16 @@ public class FrmRutaMinima extends JFrame {
         tp.addTab("Aristas", pnlAristas);
         tp.addTab("Ruta Mínima", pnlRutaMinima);
 
-        JTable tblNodos = new JTable();
-        String[] encabezadosNodos = new String[] { "Ciudad" };
-        DefaultTableModel dtm = new DefaultTableModel(null, encabezadosNodos);
+        tblNodos = new JTable();
+
+        DefaultTableModel dtm = new DefaultTableModel(null, Grafo.getEncabezadosNodos());
         tblNodos.setModel(dtm);
         JScrollPane spNodos = new JScrollPane(tblNodos);
         pnlNodos.add(spNodos);
 
-        JTable tblAristas = new JTable();
-        String[] encabezadosAristas = new String[] { "Desde", "Hasta", "Distancia" };
-        dtm = new DefaultTableModel(null, encabezadosAristas);
+        tblAristas = new JTable();
+
+        dtm = new DefaultTableModel(null, Grafo.getEncabezadosAristas());
         tblAristas.setModel(dtm);
         JScrollPane spAristas = new JScrollPane(tblAristas);
         pnlAristas.add(spAristas);
@@ -77,8 +79,22 @@ public class FrmRutaMinima extends JFrame {
         btnRutaMinima.addActionListener(evt -> calcularRutaMinima());
 
         getContentPane().add(tp);
+        cargarDatos();
+    }
 
+    private Grafo grafo;
 
+    private void cargarDatos() {
+        String nombreArchivo = System.getProperty("user.dir") + "/src/datos/distancias.txt";
+        grafo = new Grafo();
+        grafo.desdeArchivo(nombreArchivo);
+
+        grafo.mostrarNodos(cmbDesde);
+        grafo.mostrarNodos(cmbHasta);
+
+        grafo.mostrarNodos(tblNodos);
+
+        grafo.mostrarAristas(tblAristas);
     }
 
     private void calcularRutaMinima() {
