@@ -10,6 +10,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
 import servicios.Grafo;
+import servicios.Resultado;
 
 public class FrmRutaMinima extends JFrame {
 
@@ -65,8 +66,8 @@ public class FrmRutaMinima extends JFrame {
         pnlRutaMinima.add(cmbHasta);
 
         tblRutaMinima = new JTable();
-        String[] encabezadosRutaMinima = new String[] { "Ciudad", "Distancia" };
-        dtm = new DefaultTableModel(null, encabezadosRutaMinima);
+
+        dtm = new DefaultTableModel(null, Resultado.getEncabezados());
         tblRutaMinima.setModel(dtm);
         JScrollPane spRutaMinima = new JScrollPane(tblRutaMinima);
         spRutaMinima.setBounds(10, 70, 400, 300);
@@ -98,7 +99,8 @@ public class FrmRutaMinima extends JFrame {
     }
 
     private void calcularRutaMinima() {
-
+        var resultado = grafo.dijkstra((String) cmbDesde.getSelectedItem(), (String) cmbHasta.getSelectedItem());
+        resultado.mostrar(tblRutaMinima);
     }
 
 }

@@ -4,15 +4,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.transform.stax.StAXResult;
 
 public class Grafo {
 
@@ -89,6 +93,56 @@ public class Grafo {
                 .forEach(dtm::addRow);
 
         tbl.setModel(dtm);
+    }
+
+    public Resultado dijkstra(String origen, String destino) {
+        Nodo nodoOrigen = nodos.get(origen), nodoDestino = nodos.get(destino);
+
+        System.out.println(origen+" - "+destino);
+
+        Map<Nodo, Double> distancias = new HashMap<>();
+        Map<Nodo, Nodo> antecesores = new HashMap<>();
+
+        nodos.values().forEach(nodo -> distancias.put(nodo, Double.POSITIVE_INFINITY));
+        distancias.put(nodoOrigen, 0.0);
+
+        PriorityQueue<Nodo> cola = new PriorityQueue<>(Comparator.comparing(distancias::get));
+        cola.add(nodoOrigen);
+
+        while (!cola.isEmpty()) {
+            var nodoActual = cola.poll();
+            if (nodoActual == nodoDestino)
+                break;
+
+            for (var arista : nodoActual.getVecinos()) {
+                var nodoVecino = arista.getDestino();
+                double nuevaDistancia = distancias.get(nodoActual) + arista.getValor();
+                if (nuevaDistancia < distancias.get(nodoVecino)) {
+                    distancias.put(nodoVecino, nuevaDistancia);
+                    antecesores.put(nodoVecino, nodoActual);
+                    cola.remove(nodoVecino);
+                    cola.add(nodoVecino);
+                }
+
+            }
+        }
+
+        if (!antecesores.containsKey(nodoDestino) && nodoOrigen != nodoDestino)
+            return null;
+
+        Stack<Nodo> pila = new Stack<>();
+        for (Nodo nodoActual = nodoDestino; nodoActual != null; nodoActual = antecesores.get(nodoActual)) {
+            pila.push(nodoActual);
+        }
+
+        List<NodoResultado> nodosResultado = new ArrayList<>();
+        while (!pila.isEmpty()) {
+            var nodoActual = pila.pop();
+            nodosResultado.add(new NodoResultado(nodoActual.getNombre(), distancias.get(nodoActual)));
+        }
+
+        return new Resultado(nodosResultado);
+
     }
 
 }
